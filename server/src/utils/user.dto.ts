@@ -2,7 +2,7 @@ import type { UserDocument } from "../types/model.types.js";
 
 // user dto ( data transfer object )
 export interface UserDTO {
-    id: string;
+    _id: string;
     name: string;
     username: string;
     avatar: string;
@@ -13,7 +13,7 @@ export interface UserDTO {
 
 export const toUserDTO = (user: UserDocument): UserDTO => {
     return {
-        id: user._id.toString(),
+        _id: user._id.toString(),
         name: user.name,
         username: user.username,
         avatar: user.avatar,

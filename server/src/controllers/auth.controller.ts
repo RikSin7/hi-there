@@ -104,13 +104,13 @@ export const refresh = asyncHandler(async (req: Request, res: Response) => {
         payload = jwt.verify(
             refreshToken,
             process.env.JWT_REFRESH_SECRET as string
-        ) as { id: string };
+        ) as { _id: string };
     } catch {
         throw new errorHandler("Invalid refresh token", 401);
     }
 
     // generate new access token
-    const newAccessToken = generateAccessToken(payload.id);
+    const newAccessToken = generateAccessToken(payload._id);
     res.status(200).json({
         success: true,
         message: "Token refreshed successfully",

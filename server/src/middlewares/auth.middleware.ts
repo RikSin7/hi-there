@@ -18,7 +18,7 @@ export const authMiddleware = (
         throw new Error("JWT_ACCESS_SECRET not defined");
     }
 
-    const decoded = jwt.verify(token, secret) as { id: string };
+    const decoded = jwt.verify(token, secret) as { _id: string };
 
     req.user = decoded;
     next();

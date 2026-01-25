@@ -5,7 +5,7 @@ import { toUserDTO } from "../utils/user.dto.js";
 import { errorHandler } from "../utils/errorHandler.utility.js";
 
 export const getProfile = asyncHandler(async (req: Request, res: Response) => {
-    const userId = req.user!.id;
+    const userId = req.user!._id;
 
     const user = await UserModel.findById(userId).select("-password");
 
@@ -17,3 +17,17 @@ export const getProfile = asyncHandler(async (req: Request, res: Response) => {
         user: toUserDTO(user),
     });
 });
+
+export const getOtherProfiles = asyncHandler(
+    async (req: Request, res: Response) => {
+        const users = await UserModel.find({
+            _id: { $ne: req.user!._id },
+        }).sort({ createdAt: -1 });
+
+        res.status(200).json({
+            success: true,
+            message: "Profiles fetched successfully",
+            users: users.map((user) => toUserDTO(user)),
+        });
+    }
+);

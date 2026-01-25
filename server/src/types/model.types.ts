@@ -11,14 +11,16 @@ export interface User {
 }
 
 export interface Message {
+    conversationId: Types.ObjectId;
     senderId: Types.ObjectId; 
     receiverId: Types.ObjectId; 
     message: string;
+    createdAt: Date;
+    updatedAt: Date;
 }
 
 export interface Conversation {
     participants: Types.ObjectId[];
-    messages: Types.ObjectId[];
 }
 
 export interface UserDocument extends User, Document {}
