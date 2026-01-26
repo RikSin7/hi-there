@@ -13,8 +13,7 @@ export const getProfile = asyncHandler(async (req: Request, res: Response) => {
 
     res.status(200).json({
         success: true,
-        message: "Profile fetched successfully",
-        user: toUserDTO(user),
+        data: toUserDTO(user),
     });
 });
 
@@ -26,8 +25,7 @@ export const getOtherProfiles = asyncHandler(
 
         res.status(200).json({
             success: true,
-            message: "Profiles fetched successfully",
-            users: users.map((user) => toUserDTO(user)),
+            data: users.map((user) => toUserDTO(user)),
         });
     }
 );

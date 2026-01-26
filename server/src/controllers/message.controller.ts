@@ -3,6 +3,7 @@ import type { Request, Response } from "express";
 import { errorHandler } from "../utils/errorHandler.utility.js";
 import { ConversationModel } from "../models/conversation.model.js";
 import { MessageModel } from "../models/message.model.js";
+import { nextTick } from "node:process";
 
 export const sendMessage = asyncHandler(async (req: Request, res: Response) => {
     const senderId = req.user!._id;
@@ -32,11 +33,10 @@ export const sendMessage = asyncHandler(async (req: Request, res: Response) => {
         message: message.trim(),
     });
 
-    //socket.io
+    //socket.io ....
 
     res.status(201).json({
         success: true,
-        message: "Message sent successfully",
         data: newMessage,
     });
 });
@@ -45,6 +45,13 @@ export const getMessages = asyncHandler(async (req: Request, res: Response) => {
     const userId = req.user!._id;
     const { otherUserId } = req.params;
 
+    if (!otherUserId) {
+        throw new errorHandler("Other user ID is required", 400);
+    }
+
+    const limit = parseInt(req.query.limit as string) || 20;
+    const cursor = req.query.cursor as string | undefined;
+
     const conversation = await ConversationModel.findOne({
         participants: { $all: [userId, otherUserId] },
     });
@@ -52,31 +59,36 @@ export const getMessages = asyncHandler(async (req: Request, res: Response) => {
     if (!conversation) {
         return res.status(200).json({
             success: true,
-            message: "No messages yet",
             data: [],
+            nextCursor: null,
         });
     }
 
-    const messages = await MessageModel.find({
-        conversationId: conversation._id,
-    })
-        .sort({ createdAt: 1 })
+    const query: any = { conversationId: conversation._id };
+
+    if (cursor) {
+        query.createdAt = { $lt: new Date(cursor) };
+    }
+
+    let messages = await MessageModel.find(query)
+        .sort({ createdAt: -1 })
+        .limit(limit)
         .populate("senderId", "name avatar");
 
-    //format messages
-    const formattedMessages = messages.map((msg) => ({
-        _id: msg._id,
-        conversationId: msg.conversationId,
-        sender: msg.senderId,
-        receiverId: msg.receiverId,
-        message: msg.message,
-        createdAt: msg.createdAt,
-    }));
+    messages = messages.reverse();
+
+    const nextCursor = messages.length > 0 ? messages[0]!.createdAt : null;
 
     res.status(200).json({
         success: true,
-        message: "Messages fetched successfully",
-        data: formattedMessages,
+        data: messages.map((msg) => ({
+            _id: msg._id,
+            sender: msg.senderId,
+            receiverId: msg.receiverId,
+            message: msg.message,
+            createdAt: msg.createdAt,
+        })),
+        nextCursor,
     });
 });
 
@@ -86,7 +98,6 @@ export const deleteMessage = asyncHandler(
         await MessageModel.findByIdAndDelete(messageId);
         res.status(200).json({
             success: true,
-            message: "Message deleted successfully",
         });
     }
 );

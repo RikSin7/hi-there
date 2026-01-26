@@ -4,23 +4,29 @@ import AppLayout from "../layouts/AppLayout";
 import Login from "../pages/auth/Login";
 import Signup from "../pages/auth/Signup";
 import Chat from "../pages/home/Chat";
+import App from "../App";
 
 export const router = createBrowserRouter([
     {
-        path: "/",
-        element: <Navigate to="/auth/login" replace />,
-    },
-    {
-        path: "/auth",
-        element: <AuthLayout />,
+        element: <App />, // root layout
         children: [
-            { path: "login", element: <Login /> },
-            { path: "signup", element: <Signup /> },
+            {
+                path: "/",
+                element: <Navigate to="/auth/login" replace />,
+            },
+            {
+                path: "/auth",
+                element: <AuthLayout />,
+                children: [
+                    { path: "login", element: <Login /> },
+                    { path: "signup", element: <Signup /> },
+                ],
+            },
+            {
+                path: "/home",
+                element: <AppLayout />,
+                children: [{ path: "chat", element: <Chat /> }],
+            },
         ],
-    },
-    {
-        path: "/home",
-        element: <AppLayout />,
-        children: [{ path: "chat", element: <Chat /> }],
     },
 ]);

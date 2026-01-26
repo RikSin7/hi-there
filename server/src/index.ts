@@ -7,6 +7,7 @@ import { connectDB } from "./config/db.js";
 import authRoute from "./routes/auth.routes.js";
 import userRoute from "./routes/user.routes.js";
 import messageRoute from "./routes/message.route.js";
+import chatRoute from "./routes/chat.routes.js";
 
 // middlewares
 import errorMiddleware from "./middlewares/error.middleware.js";
@@ -27,6 +28,7 @@ app.use(cookieParser());
 app.use("/api/v1/auth", authRoute);
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/message", messageRoute);
+app.use("/api/v1/chats", chatRoute);
 
 // health check
 app.get("/", (_req, res) => {

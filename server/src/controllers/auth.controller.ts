@@ -53,8 +53,7 @@ export const signup = asyncHandler(async (req: Request, res: Response) => {
 
     res.status(201).json({
         success: true,
-        message: "User created successfully",
-        user: toUserDTO(user),
+        data: toUserDTO(user),
         accessToken,
     });
 });
@@ -86,8 +85,7 @@ export const login = asyncHandler(async (req: Request, res: Response) => {
 
     res.status(200).json({
         success: true,
-        message: "Login successful",
-        user: toUserDTO(user),
+        data: toUserDTO(user),
         accessToken,
     });
 });
@@ -113,7 +111,6 @@ export const refresh = asyncHandler(async (req: Request, res: Response) => {
     const newAccessToken = generateAccessToken(payload._id);
     res.status(200).json({
         success: true,
-        message: "Token refreshed successfully",
         accessToken: newAccessToken,
     });
 });
@@ -121,5 +118,5 @@ export const refresh = asyncHandler(async (req: Request, res: Response) => {
 //logout
 export const logout = asyncHandler(async (_req: Request, res: Response) => {
     res.clearCookie("refreshToken");
-    res.json({ success: true, message: "Logout successful" });
+    res.json({ success: true });
 });

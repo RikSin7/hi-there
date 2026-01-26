@@ -21,6 +21,8 @@ export interface Message {
 
 export interface Conversation {
     participants: Types.ObjectId[];
+    createdAt: Date;
+    updatedAt: Date;
 }
 
 export interface UserDocument extends User, Document {}
