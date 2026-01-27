@@ -196,7 +196,7 @@ function Signup() {
             <p className="text-sm text-neutral-400 mt-4"> 
                 Already have an account?{" "}
                 <button
-                    onClick={() => navigate("/auth/login")}
+                    onClick={() => navigate("/signin")}
                     className="text-white hover:underline"
                 >
                     Sign in

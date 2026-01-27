@@ -131,7 +131,7 @@ function Login() {
             <p className="text-sm text-neutral-400 mt-4">
                 Don't have an account?{" "}
                 <button
-                    onClick={() => navigate("/auth/signup")}
+                    onClick={() => navigate("/signup")}
                     className="text-white hover:underline"
                 >
                     Sign up

@@ -3,10 +3,11 @@ import AuthLayout from "../layouts/AuthLayout";
 import AppLayout from "../layouts/AppLayout";
 import Login from "../pages/auth/Login";
 import Signup from "../pages/auth/Signup";
-import Chat from "../pages/home/Chat";
 import App from "../App";
 import PublicRoute from "./PublicRoute";
 import ProtectedRoute from "./ProtectedRoute";
+import Chat from "../pages/chat/Chat";
+import NotFound from "../pages/system/NotFound";
 
 export const router = createBrowserRouter([
     {
@@ -14,7 +15,7 @@ export const router = createBrowserRouter([
         children: [
             {
                 path: "/",
-                element: <Navigate to="/auth/login" replace />,
+                element: <Navigate to="/signin" replace />,
             },
 
             // 🔓 Public routes
@@ -22,10 +23,9 @@ export const router = createBrowserRouter([
                 element: <PublicRoute />,
                 children: [
                     {
-                        path: "/auth",
                         element: <AuthLayout />,
                         children: [
-                            { path: "login", element: <Login /> },
+                            { path: "signin", element: <Login /> },
                             { path: "signup", element: <Signup /> },
                         ],
                     },
@@ -37,11 +37,14 @@ export const router = createBrowserRouter([
                 element: <ProtectedRoute />,
                 children: [
                     {
-                        path: "/home",
                         element: <AppLayout />,
                         children: [{ path: "chat", element: <Chat /> }],
                     },
                 ],
+            },
+            {
+                path: "*",
+                element: <NotFound />,
             },
         ],
     },

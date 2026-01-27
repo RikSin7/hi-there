@@ -1,5 +1,6 @@
 import axios from "axios";
-import { getToken, removeToken } from "../../utils/token";
+import { getToken, removeToken, setToken } from "../../utils/token";
+import { AuthService } from "..";
 
 // Create axios instance
 export const api = axios.create({
@@ -20,13 +21,25 @@ api.interceptors.request.use((config) => {
     return config;
 });
 
-// Response interceptor → global error handling
+// Response interceptor → refresh token + error handling
 api.interceptors.response.use(
     (res) => res,
-    (err) => {
-        if (err.response?.status === 401) {
-            removeToken();
+    async (err) => {
+        const originalRequest = err.config;
+
+        if (err.response?.status === 401 && !originalRequest._retry) {
+            originalRequest._retry = true;
+
+            try {
+                const { accessToken } = await AuthService.refresh();
+                setToken(accessToken);
+                originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+                return api(originalRequest);
+            } catch {
+                removeToken();
+            }
         }
+
         return Promise.reject(err);
     }
 );
