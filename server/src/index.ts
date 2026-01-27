@@ -11,13 +11,22 @@ import chatRoute from "./routes/chat.routes.js";
 
 // middlewares
 import errorMiddleware from "./middlewares/error.middleware.js";
-
 dotenv.config();
+
+//cors
+import cors from "cors";
 
 // connect database
 connectDB();
 
 const app = express();
+app.use(
+    cors({
+        origin: "http://localhost:5173",
+        credentials: true,
+    })
+);
+
 const PORT = process.env.PORT || 5000;
 
 // middlewares

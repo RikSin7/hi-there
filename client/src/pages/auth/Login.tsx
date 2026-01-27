@@ -1,9 +1,13 @@
+import { useAppDispatch } from "../../hooks/useRedux";
 import { useToast } from "../../hooks/useToast";
+import { loginThunk } from "../../store/auth/auth.thunks";
 
 function Login() {
     const { show } = useToast("dark");
+    const dispatch = useAppDispatch();
     const handleLogin = () => {
-        show("Login successful", "success");
+        dispatch(loginThunk({ username: "rikxsin0", password: "12345678" }));
+        show("Login success");
     };
     return (
         <div className="">

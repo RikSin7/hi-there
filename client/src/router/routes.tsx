@@ -5,27 +5,43 @@ import Login from "../pages/auth/Login";
 import Signup from "../pages/auth/Signup";
 import Chat from "../pages/home/Chat";
 import App from "../App";
+import PublicRoute from "./PublicRoute";
+import ProtectedRoute from "./ProtectedRoute";
 
 export const router = createBrowserRouter([
     {
-        element: <App />, // root layout
+        element: <App />,
         children: [
             {
                 path: "/",
                 element: <Navigate to="/auth/login" replace />,
             },
+
+            // 🔓 Public routes (auth pages)
             {
-                path: "/auth",
-                element: <AuthLayout />,
+                element: <PublicRoute />,
                 children: [
-                    { path: "login", element: <Login /> },
-                    { path: "signup", element: <Signup /> },
+                    {
+                        path: "/auth",
+                        element: <AuthLayout />,
+                        children: [
+                            { path: "login", element: <Login /> },
+                            { path: "signup", element: <Signup /> },
+                        ],
+                    },
                 ],
             },
+
+            // 🔐 Protected routes
             {
-                path: "/home",
-                element: <AppLayout />,
-                children: [{ path: "chat", element: <Chat /> }],
+                element: <ProtectedRoute />,
+                children: [
+                    {
+                        path: "/home",
+                        element: <AppLayout />,
+                        children: [{ path: "chat", element: <Chat /> }],
+                    },
+                ],
             },
         ],
     },

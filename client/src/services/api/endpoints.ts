@@ -2,6 +2,7 @@ export const AUTH = {
     LOGIN: "/auth/login",
     SIGNUP: "/auth/signup",
     REFRESH: "/auth/refresh",
+    LOGOUT: "/auth/logout",
 };
 
 export const CHAT = {
