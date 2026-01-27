@@ -6,8 +6,13 @@ export const getChats = async () => {
     return data;
 };
 
-export const getMessages = async (otherUserId: string) => {
-    const { data } = await api.get(CHAT.GET_MESSAGES(otherUserId));
+export const getMessages = async (otherUserId: string, cursor?: string) => {
+    const { data } = await api.get(CHAT.GET_MESSAGES(otherUserId), {
+        params: {
+            cursor,
+        },
+    });
+
     return data;
 };
 

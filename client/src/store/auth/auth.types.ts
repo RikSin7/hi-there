@@ -2,7 +2,7 @@ export interface AuthState {
     isAuthenticated: boolean;
     accessToken: string | null;
     buttonLoading: boolean;
-    loading: boolean;
+    screenLoading: boolean;
     error: string | null;
 }
 
@@ -16,7 +16,7 @@ export interface SignupPayload {
     username: string;
     email?: string;
     password: string;
-    gender: "male" | "female";
+    gender: "male" | "female" | "";
 }
 
 export interface AuthResponse {
@@ -28,7 +28,7 @@ export interface AuthResponse {
         avatar?: string;
         email?: string;
         role: "user" | "admin";
-        gender: "male" | "female";
+        gender: "male" | "female" | "";
     };
     accessToken: string;
 }

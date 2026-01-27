@@ -1,11 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { UserState } from "./user.types";
-import { fetchUserProfileThunk } from "./user.thunks";
+import { fetchProfileThunk, fetchUsersThunk } from "./user.thunks";
 
 const initialState: UserState = {
     profile: null,
     loading: false,
     error: null,
+    users: [],
 };
 
 const userSlice = createSlice({
@@ -18,14 +19,29 @@ const userSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchUserProfileThunk.pending, (state) => {
+            // fetch profile
+            .addCase(fetchProfileThunk.pending, (state) => {
                 state.loading = true;
             })
-            .addCase(fetchUserProfileThunk.fulfilled, (state, action) => {
+            .addCase(fetchProfileThunk.fulfilled, (state, action) => {
                 state.loading = false;
                 state.profile = action.payload;
             })
-            .addCase(fetchUserProfileThunk.rejected, (state, action) => {
+            .addCase(fetchProfileThunk.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload as string;
+            })
+
+            //fetch other users
+            .addCase(fetchUsersThunk.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(fetchUsersThunk.fulfilled, (state, action) => {
+                state.loading = false;
+                state.users = action.payload;
+            })
+            .addCase(fetchUsersThunk.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload as string;
             });

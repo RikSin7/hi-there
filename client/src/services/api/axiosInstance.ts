@@ -26,7 +26,6 @@ api.interceptors.response.use(
     (err) => {
         if (err.response?.status === 401) {
             removeToken();
-            window.location.replace("/auth/login");
         }
         return Promise.reject(err);
     }

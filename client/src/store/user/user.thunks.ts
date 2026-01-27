@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { UserService } from "../../services";
 import type { User } from "./user.types";
 
-export const fetchUserProfileThunk = createAsyncThunk<
+export const fetchProfileThunk = createAsyncThunk<
     User,
     void,
     { rejectValue: string }

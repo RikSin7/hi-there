@@ -17,7 +17,7 @@ export const router = createBrowserRouter([
                 element: <Navigate to="/auth/login" replace />,
             },
 
-            // 🔓 Public routes (auth pages)
+            // 🔓 Public routes
             {
                 element: <PublicRoute />,
                 children: [

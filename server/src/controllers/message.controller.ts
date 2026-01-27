@@ -42,7 +42,7 @@ export const sendMessage = asyncHandler(async (req: Request, res: Response) => {
 
 export const getMessages = asyncHandler(async (req: Request, res: Response) => {
     const userId = req.user!._id;
-    const { otherUserId } = req.params;
+    const { otherUserId } = req.params as { otherUserId: string };
 
     if (!otherUserId) {
         throw new errorHandler("Other user ID is required", 400);
@@ -66,7 +66,7 @@ export const getMessages = asyncHandler(async (req: Request, res: Response) => {
     const query: any = { conversationId: conversation._id };
 
     if (cursor) {
-        query.createdAt = { $lt: new Date(cursor) };
+        query.createdAt = { $lt: cursor };
     }
 
     let messages = await MessageModel.find(query)
