@@ -5,7 +5,7 @@ export default function PublicRoute() {
     const { isAuthenticated } = useAppSelector((state) => state.auth);
 
     if (isAuthenticated) {
-        return <Navigate to="/chat" replace />;
+        return <Navigate to="/home" replace />;
     }
 
     return <Outlet />;

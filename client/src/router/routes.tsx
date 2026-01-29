@@ -8,6 +8,7 @@ import PublicRoute from "./PublicRoute";
 import ProtectedRoute from "./ProtectedRoute";
 import Chat from "../pages/chat/Chat";
 import NotFound from "../pages/system/NotFound";
+import Home from "../pages/home/Home";
 
 export const router = createBrowserRouter([
     {
@@ -38,7 +39,10 @@ export const router = createBrowserRouter([
                 children: [
                     {
                         element: <AppLayout />,
-                        children: [{ path: "chat", element: <Chat /> }],
+                        children: [
+                            { path: "home", element: <Home /> },
+                            { path: "chat/:userId", element: <Chat /> },
+                        ],
                     },
                 ],
             },

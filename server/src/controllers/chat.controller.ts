@@ -12,37 +12,33 @@ export const getChats = asyncHandler(async (req: Request, res: Response) => {
         .sort({ updatedAt: -1 })
         .populate("participants", "name avatar");
 
-    if (!conversations) {
+    // Always return array — never null
+    if (!conversations.length) {
         return res.status(200).json({
             success: true,
-            message: "No conversations yet",
             data: [],
         });
     }
 
-    //format conversations
-    const formattedChats = conversations.map((conv) => {
-        const otherUser = conv.participants.find(
-            (p: any) => p._id.toString() !== userId.toString()
-        );
-
-        return {
-            _id: conv._id,
-            user: otherUser,
-            updatedAt: conv.updatedAt,
-        };
-    });
-
     const chatsWithLastMessage = await Promise.all(
-        formattedChats.map(async (chat) => {
+        conversations.map(async (conv) => {
+            const otherUser = conv.participants.find(
+                (p: any) => p._id.toString() !== userId.toString()
+            );
+
+            // 🔒 HARD GUARANTEE
+            if (!otherUser) return null;
+
             const lastMessage = await MessageModel.findOne({
-                conversationId: chat._id,
+                conversationId: conv._id,
             })
                 .sort({ createdAt: -1 })
                 .select("message createdAt senderId");
 
             return {
-                ...chat,
+                _id: conv._id,
+                user: otherUser, //ALWAYS present
+                updatedAt: conv.updatedAt,
                 lastMessage,
             };
         })
@@ -50,6 +46,6 @@ export const getChats = asyncHandler(async (req: Request, res: Response) => {
 
     res.status(200).json({
         success: true,
-        data: chatsWithLastMessage,
+        data: chatsWithLastMessage.filter(Boolean), // remove invalid chats
     });
 });

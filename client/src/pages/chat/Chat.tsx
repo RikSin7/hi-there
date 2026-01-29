@@ -1,11 +1,11 @@
-import ChatWindow from '../../components/chat/ChatWindow'
+import ChatWindow from "../../components/chat/ChatWindow";
 
 function Chat() {
-  return (
-    <div>
-      <ChatWindow />
-    </div>
-  )
+    return (
+        <>
+            <ChatWindow />
+        </>
+    );
 }
 
-export default Chat
+export default Chat;

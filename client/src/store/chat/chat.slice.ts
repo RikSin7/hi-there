@@ -1,10 +1,6 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { ChatState, Message } from "./chat.types";
-import {
-    fetchChatsThunk,
-    fetchMessagesThunk,
-    sendMessageThunk,
-} from "./chat.thunk";
+import type { ChatState } from "./chat.types";
+import { fetchChatsThunk, fetchMessagesThunk } from "./chat.thunk";
 
 const initialState: ChatState = {
     chats: [],
@@ -63,18 +59,6 @@ const chatSlice = createSlice({
                 state.loadingByUserId[otherUserId] = false;
                 state.errorByUserId[otherUserId] =
                     (action.payload as string) || "Failed to fetch messages";
-            })
-
-            /* ===================== SEND MESSAGE ===================== */
-            .addCase(sendMessageThunk.fulfilled, (state, action) => {
-                const msg: Message = action.payload;
-                const { receiverId } = action.meta.arg;
-
-                if (!state.messagesByUserId[receiverId]) {
-                    state.messagesByUserId[receiverId] = [];
-                }
-
-                state.messagesByUserId[receiverId].push(msg);
             });
     },
 });

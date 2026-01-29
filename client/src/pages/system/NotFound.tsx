@@ -12,10 +12,10 @@ export default function NotFound() {
 
                 <div className="flex items-center justify-center gap-4">
                     <Link
-                        to="/chat"
+                        to="/home"
                         className="px-4 py-2 rounded-md bg-white text-black text-sm font-medium hover:bg-neutral-200 transition"
                     >
-                        Go to Chat
+                        Go to Home
                     </Link>
 
                     <Link
