@@ -1,6 +1,6 @@
 import { UserModel } from "../models/user.model.js";
 import { asyncHandler } from "../utils/asyncHandler.utility.js";
-import bcrypt from "bcrypt";
+// import bcrypt from "bcrypt";
 
 import type { Request, Response } from "express";
 
@@ -24,16 +24,22 @@ export const signup = asyncHandler(async (req: Request, res: Response) => {
     const existingUser = await UserModel.findOne({ username });
     if (existingUser) throw new errorHandler("Username already taken", 409);
 
-    const existingEmail = await UserModel.findOne({ email });
-    if (existingEmail) throw new errorHandler("Email already taken", 409);
+    // Handle optional email - convert empty string to undefined to avoid unique constraint violation
+    const emailToUse = email === "" ? undefined : email;
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    if (emailToUse) {
+        const existingEmail = await UserModel.findOne({ email: emailToUse });
+        if (existingEmail) throw new errorHandler("Email already taken", 409);
+    }
+
+    // const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = password;
 
     // create user
     const user = await UserModel.create({
         name,
         username,
-        email,
+        email: emailToUse,
         password: hashedPassword,
         gender,
         role: "user",
@@ -70,7 +76,8 @@ export const login = asyncHandler(async (req: Request, res: Response) => {
         throw new errorHandler("Invalid credentials", 401);
     }
 
-    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+    // const isPasswordCorrect = await bcrypt.compare(password, user.password);
+    const isPasswordCorrect = password === user.password;
     if (!isPasswordCorrect) throw new errorHandler("Invalid credentials", 401);
 
     const accessToken = generateAccessToken(user._id.toString());

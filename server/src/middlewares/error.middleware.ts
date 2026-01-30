@@ -45,9 +45,12 @@ const errorMiddleware = (
         console.error(err);
     }
 
+    // DEBUG: Send actual error
     res.status(statusCode).json({
         success: false,
-        message,
+        message: message === "Internal Server Error" ? (err as any).message : message,
+        stack: (err as any).stack,
+        error: err
     });
 };
 
