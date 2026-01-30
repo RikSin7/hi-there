@@ -45,7 +45,7 @@ function ChatWindow() {
     }
 
     return (
-        <section className="flex flex-col h-full max-h-screen">
+        <section className="flex flex-col h-full overflow-hidden">
             {/* Header */}
             <header className="h-16 px-4 flex items-center border-b border-neutral-800">
                 <div className="flex items-center gap-3">

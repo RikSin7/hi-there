@@ -12,7 +12,7 @@ export default function AppLayout() {
     }, [dispatch]);
 
     return (
-        <div className="h-screen bg-black text-white flex">
+        <div className="h-[100dvh] bg-black text-white flex">
             <Sidebar />
             <main className="flex-1 overflow-hidden flex flex-col">
                 <Outlet />
